@@ -1,7 +1,7 @@
 #!/bin/bash
 #This script will burn timecode from what is embedded in a video file
 #in=/path/to/input_file
-in="11000001.MP4"
+read -e -p "Enter path to input file:" in
 echo -e "$in"
 #out=/path/to/ouput_file.mov
 out="${in%.*}.mov"
