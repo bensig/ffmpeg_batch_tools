@@ -1,4 +1,4 @@
-Bash script to run ffmpeg on a single h264 mp4 file and output an mjpeg mov file at 1/4 resolution with nice timecode on it.
+Script to run ffmpeg on a single h264 mp4 file, remove audio, scale resolution to 1/4 resolution and put a text overlay with nice timecode on it from the embedded timecode.
 
 Change variables of the script to suit your needs.
 
