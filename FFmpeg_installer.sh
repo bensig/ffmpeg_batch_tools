@@ -1,11 +1,20 @@
 #Based on from https://trac.ffmpeg.org/wiki/CompilationGuide/Ubuntu
 # created by bensig on 10/4/2017
 #Prep steps: 
-sudo apt-get remove ffmpeg 
-sudo apt-get update && sudo apt-get install --no-install-recommends --no-upgrade libtheora-dev libass-dev libfreetype6-dev autoconf autogen automake build-essential libsdl2-dev libtheora-dev libtool libva-dev libvdpau-dev libvorbis-dev libxcb1-dev libxcb-shm0-dev libxcb-xfixes0-dev pkg-config texinfo wget zlib1g-dev yasm libx264-dev libx265-dev libfdk-aac-dev libmp3lame-dev libopus-dev libvpx-dev
-
 mkdir ~/ffmpeg_sources
+sudo apt-get remove ffmpeg 
+sudo apt-get update && sudo apt-get install --no-upgrade libtheora-dev libass-dev libfreetype6-dev autoconf autogen automake build-essential libsdl2-dev libtheora-dev libtool libva-dev libvdpau-dev libvorbis-dev libxcb1-dev libxcb-shm0-dev libxcb-xfixes0-dev pkg-config texinfo wget zlib1g-dev yasm libx264-dev libx265-dev libfdk-aac-dev libmp3lame-dev libopus-dev libvpx-dev
 
+#install x265 manually - this seems to fail in ubuntu apt/ffmpeg installer
+sudo apt-get install cmake mercurial
+cd ~/ffmpeg_sources
+hg clone https://bitbucket.org/multicoreware/x265
+cd ~/ffmpeg_sources/x265/build/linux
+PATH="$HOME/bin:$PATH" cmake -G "Unix Makefiles" -DCMAKE_INSTALL_PREFIX="$HOME/ffmpeg_build" -DENABLE_SHARED:bool=off ../../source
+make
+make install
+
+#download and install ffmpeg
 cd ~/ffmpeg_sources
 wget http://ffmpeg.org/releases/ffmpeg-snapshot.tar.bz2
 tar xjvf ffmpeg-snapshot.tar.bz2
