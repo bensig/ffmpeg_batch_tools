@@ -5,7 +5,7 @@ mkdir ~/ffmpeg_sources
 sudo apt-get remove ffmpeg 
 sudo apt-get update && sudo apt-get install --no-upgrade libtheora-dev libass-dev libfreetype6-dev autoconf autogen automake build-essential libsdl2-dev libtheora-dev libtool libva-dev libvdpau-dev libvorbis-dev libxcb1-dev libxcb-shm0-dev libxcb-xfixes0-dev pkg-config texinfo wget zlib1g-dev yasm libx264-dev libx265-dev libfdk-aac-dev libmp3lame-dev libopus-dev libvpx-dev
 
-#install x265 manually - this seems to fail in ubuntu apt/ffmpeg installer
+#install x265 manually - ffmpeg seems to fail in finding the ubuntu apt install of x265
 sudo apt-get install cmake mercurial
 cd ~/ffmpeg_sources
 hg clone https://bitbucket.org/multicoreware/x265
@@ -46,6 +46,7 @@ echo "MANPATH_MAP $HOME/bin $HOME/ffmpeg_build/share/man" >> ~/.manpath
 #Download and install droid sans mono from google fonts - DroidSansMono-Regular.ttf - there might be a cleaner way to do this if this breaks, email me.
 cd ~/ffmpeg_sources
 wget https://github.com/google/fonts/raw/master/apache/droidsansmono/DroidSansMono-Regular.ttf
-sudo mv DroidSansMono-Regular.ttf /usr/local/share/fonts/d/DroidSansMono_Regular.ttf
+sudo mkdir /usr/local/share/fonts/d/
+sudo mv ~/ffmpeg_sources/DroidSansMono-Regular.ttf /usr/local/share/fonts/d/DroidSansMono_Regular.ttf
 sudo apt-get install fontconfig
 sudo fc-cache -fv
