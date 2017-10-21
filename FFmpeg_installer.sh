@@ -2,8 +2,14 @@
 # created by bensig on 10/4/2017
 #Prep steps: 
 mkdir ~/ffmpeg_sources
-sudo apt-get remove ffmpeg 
-sudo apt-get update && sudo apt-get install --no-upgrade libtheora-dev libass-dev libfreetype6-dev autoconf autogen automake build-essential libsdl2-dev libtheora-dev libtool libva-dev libvdpau-dev libvorbis-dev libxcb1-dev libxcb-shm0-dev libxcb-xfixes0-dev pkg-config texinfo wget zlib1g-dev yasm libx264-dev libx265-dev libfdk-aac-dev libmp3lame-dev libopus-dev libvpx-dev libnuma-dev
+	sudo apt-get remove ffmpeg 
+	sudo apt-get update && sudo apt-get install -y --no-upgrade autoconf automake build-essential mercurial git libarchive-dev \
+	fontconfig checkinstall libass-dev libfreetype6-dev libsdl2-dev libtheora-dev libgnutls-dev libvorbis-dev \
+	libxcb1-dev libxcb-shm0-dev libxcb-xfixes0-dev pkg-config texinfo libtool libva-dev \
+	libbs2b-dev libcaca-dev libopenjpeg-dev librtmp-dev libvpx-dev libvdpau-dev wget \
+	libwavpack-dev libxvidcore-dev lzma-dev liblzma-dev zlib1g-dev cmake-curses-gui \
+	libx11-dev libxfixes-dev libmp3lame-dev 
+
 #install NASM assembler
 cd ~/ffmpeg_sources
 wget http://www.nasm.us/pub/nasm/releasebuilds/2.13.01/nasm-2.13.01.tar.bz2
@@ -14,6 +20,26 @@ PATH="$HOME/bin:$PATH" ./configure --prefix="$HOME/ffmpeg_build" --bindir="$HOME
 PATH="$HOME/bin:$PATH" make
 make install
 
+#install libnuma
+   SOURCE_PREFIX="${HOME}/ffmpeg_sources"
+
+   NUMA_LIB="numactl-2.0.11.tar.gz"
+   NUMA_PATH=$(basename ${NUMA_LIB} .tar.gz)
+
+   cd ${SOURCE_PREFIX}
+
+   if [ ! -d "${NUMA_PATH}" ];then
+
+        wget -O ${NUMA_LIB} "ftp://oss.sgi.com/www/projects/libnuma/download/${NUMA_LIB}"
+   fi
+
+   tar xfzv ${NUMA_LIB}
+   cd ${NUMA_PATH}
+   ./configure
+   make
+   make install
+   sleep 5
+
 #compile x264... 
 cd ~/ffmpeg_sources
 wget http://download.videolan.org/pub/x264/snapshots/last_x264.tar.bz2
@@ -22,6 +48,7 @@ cd x264-snapshot*
 PATH="$HOME/bin:$PATH" ./configure --prefix="$HOME/ffmpeg_build" --bindir="$HOME/bin" --enable-static --disable-opencl
 PATH="$HOME/bin:$PATH" make
 make install
+sleep 5
 
 #install x265 manually - ffmpeg seems to fail in finding the ubuntu apt install of x265
 sudo apt-get install cmake mercurial
@@ -31,6 +58,7 @@ cd ~/ffmpeg_sources/x265/build/linux
 PATH="$HOME/bin:$PATH" cmake -G "Unix Makefiles" -DCMAKE_INSTALL_PREFIX="$HOME/ffmpeg_build" -DENABLE_SHARED:bool=off ../../source
 make
 make install
+sleep 5
 
 #download and install ffmpeg
 cd ~/ffmpeg_sources
@@ -57,6 +85,7 @@ PATH="$HOME/bin:$PATH" PKG_CONFIG_PATH="$HOME/ffmpeg_build/lib/pkgconfig" ./conf
   --enable-nonfree
 PATH="$HOME/bin:$PATH" make
 make install
+sleep 5
 hash -r
 
 echo "MANPATH_MAP $HOME/bin $HOME/ffmpeg_build/share/man" >> ~/.manpath
