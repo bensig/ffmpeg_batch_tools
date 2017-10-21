@@ -2,7 +2,7 @@
 # created by bensig on 10/4/2017
 #Prep steps: 
 mkdir ~/ffmpeg_sources
-	sudo apt-get remove ffmpeg 
+	sudo apt-get remove ffmpeg x265 x264 libx264-dev libx265-dev
 	sudo apt-get update && sudo apt-get install -y --no-upgrade autoconf automake build-essential mercurial git libarchive-dev \
 	fontconfig checkinstall libass-dev libfreetype6-dev libsdl2-dev libtheora-dev libgnutls-dev libvorbis-dev \
 	libxcb1-dev libxcb-shm0-dev libxcb-xfixes0-dev pkg-config texinfo libtool libva-dev \
