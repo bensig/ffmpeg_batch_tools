@@ -1,19 +1,17 @@
-Script to run ffmpeg on a single h264 mp4 file, remove audio, scale resolution to 1/4 resolution and put a text overlay with nice timecode on it from the embedded timecode.
+Bash scripts to batch video file conversions. Change variables of the script to suit your needs or create new ones using my code.
 
-Change variables of the script to suit your needs.
+I built this because transcoding video with subtitles is a pain when I have to use After Effects or AVID.
 
-I tested this on Ubuntu 16.04
+This is tested and working on a Ubuntu 16.04 clean install. 
 
-Install these packages:
-	sudo apt-get install libass-dev libtheora-dev libfreetype6-dev autoconf autogen
+USAGE:
+sudo FFmpeg_installer.sh - The installer script will download, compile, and install a version of ffmpeg for running these scripts as well as Google fonts for writing timecode onto your video.
 
-Then follow this guide:
-	https://trac.ffmpeg.org/wiki/CompilationGuide/Ubuntu
+TimeCodeBurn.sh - This will prompt you for a file input, then it will resize the video, extract and stripe timecode on the bottom of the video. This outputs a .mov of the same name.
+BatchTimeCodeBurn.sh - Batch of above! This will recursively find all *.MP4 files in the directory where it is run and create .mov files with timecode burned-in.
+ConvertDNXHD1080p.sh - This will prompt you for a file input, then it will resize the video to 1080p using DNXHD codec for AVID.
+BatchConvertDNXHD1080p.sh - Batch of above! This will recursively find all *.MP4 files in the directory where it is run and create basename_dnxhd.mov files.
 
-Download and install droid sans mono from google fonts
-	DroidSansMono.ttf
-
-You may need to change the location of the font on your system. On my system it is at:
-	font=/usr/local/share/fonts/d/DroidSansMono_Regular.ttf
+FUTURE: Possibly looking to make this more portable than Ubuntu 16.04 using Docker or Python or both! 
 
 - bensig@gmail.com
