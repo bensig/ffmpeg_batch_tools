@@ -8,12 +8,13 @@ ffmpeg_sources_dir = "$HOME/ffmpeg/ffmpeg_sources"
 #Prep steps: 
 	mkdir $ffmpeg_sources_dir
 	sudo apt-get remove ffmpeg x265 x264 libx264-dev libx265-dev
+
 	sudo apt-get update && sudo apt-get install -y --no-upgrade autoconf automake build-essential mercurial git libarchive-dev \
 	fontconfig checkinstall libass-dev libfreetype6-dev libsdl2-dev libtheora-dev libgnutls-dev libvorbis-dev \
 	libxcb1-dev libxcb-shm0-dev libxcb-xfixes0-dev pkg-config texinfo libtool libva-dev \
 	libbs2b-dev libcaca-dev libopenjp2-7-dev librtmp-dev libvpx-dev libvdpau-dev wget \
 	libwavpack-dev libxvidcore-dev lzma-dev liblzma-dev zlib1g-dev cmake-curses-gui \
-	libx11-dev libxfixes-dev libmp3lame-dev libfdk-aac-dev sudo apt-get libopus-dev
+	libx11-dev libxfixes-dev libmp3lame-dev libfdk-aac-dev libopus-dev
 
 #install NASM assembler
 	cd $ffmpeg_sources_dir
