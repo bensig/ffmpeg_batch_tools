@@ -83,6 +83,7 @@ ffmpeg_sources_dir = "$HOME/ffmpeg/ffmpeg_sources"
 	  --enable-libvorbis \
 	  --enable-libvpx \
 	  --enable-libx264 \
+	  --enable-pthreads \
 	  --enable-nonfree
 	PATH="$HOME/bin:$PATH" make
 	make install
