@@ -38,8 +38,8 @@ function install_nasm () {
 	tar xjvf nasm-2.13.01.tar.bz2
 	cd nasm-2.13.01
 	./autogen.sh
-	PATH="$ffmpeg_home_dir:$PATH" ./configure --prefix=$ffmpeg_build_dir --bindir="$ffmpeg_home_dir"
-	PATH="$ffmpeg_home_dir:$PATH" make
+	PATH="$ffmpeg_bin_dir:$PATH" ./configure --prefix=$ffmpeg_build_dir --bindir="$ffmpeg_bin_dir"
+	PATH="$ffmpeg_bin_dir:$PATH" make
 	make install
 }
 
@@ -54,8 +54,8 @@ function install_libnuma () {
    	fi
    	tar xfzv ${NUMA_LIB}
    	cd ${NUMA_PATH}
-   	./configure PATH="$ffmpeg_home_dir:$PATH" --prefix=$ffmpeg_build_dir --bindir="$ffmpeg_home_dir"
-	PATH="$ffmpeg_home_dir:$PATH" make
+   	./configure PATH="$ffmpeg_bin_dir:$PATH" --prefix=$ffmpeg_build_dir --bindir="$ffmpeg_bin_dir"
+	PATH="$ffmpeg_bin_dir:$PATH" make
 	make install
 	sleep 5
 }
@@ -66,23 +66,24 @@ function install_x264 () {
 	wget http://download.videolan.org/pub/x264/snapshots/last_x264.tar.bz2
 	tar xjvf last_x264.tar.bz2
 	cd x264-snapshot*
-	PATH="$ffmpeg_home_dir:$PATH" ./configure --prefix=$ffmpeg_build_dir --bindir="$ffmpeg_home_dir" --enable-static --disable-opencl
-	PATH="$ffmpeg_home_dir:$PATH" make
+	PATH="$ffmpeg_bin_dir:$PATH" ./configure --prefix=$ffmpeg_build_dir --bindir="$ffmpeg_bin_dir" --enable-static --disable-opencl
+	PATH="$ffmpeg_bin_dir:$PATH" make
 	make install
 	sleep 5
 }
 
-#function install_x265 () {
-#install x265 manually - ffmpeg seems to fail in finding the ubuntu apt install of x265
-#	sudo apt-get install cmake mercurial
-#	cd $ffmpeg_sources_dir
-#	hg clone https://bitbucket.org/multicoreware/x265
-#	cd $ffmpeg_sources_dir/x265/build/linux
-#	PATH="$ffmpeg_home_dir:$PATH" cmake -G "Unix Makefiles" -DCMAKE_INSTALL_PREFIX=$ffmpeg_build_dir -DENABLE_SHARED:bool=off ../../source
-#	make
-#	make install
-#	sleep 5
-#}
+function install_x265 () {
+  #compile x265...
+  install x265 manually - ffmpeg seems to fail in finding the ubuntu apt install of x265
+	sudo apt-get install cmake mercurial
+	cd $ffmpeg_sources_dir
+	hg clone https://bitbucket.org/multicoreware/x265
+	cd $ffmpeg_sources_dir/x265/build/linux
+	PATH="$ffmpeg_bin_dir:$PATH" cmake -G "Unix Makefiles" -DCMAKE_INSTALL_PREFIX=$ffmpeg_build_dir -DENABLE_SHARED:bool=off ../../source
+	make
+	make install
+	sleep 5
+}
 
 function install_droidsansmono_font () {
 #Download and install droid sans mono from google fonts - DroidSansMono-Regular.ttf - there might be a cleaner way to do this if this breaks, email me.
@@ -100,12 +101,12 @@ function install_ffmpeg () {
 	wget http://ffmpeg.org/releases/ffmpeg-snapshot.tar.bz2
 	tar xjvf ffmpeg-snapshot.tar.bz2
 	cd ffmpeg
-	PATH="$ffmpeg_home_dir:$PATH" PKG_CONFIG_PATH="$ffmpeg_build_dir/lib/pkgconfig" ./configure \
+	PATH="$ffmpeg_bin_dir:$PATH" PKG_CONFIG_PATH="$ffmpeg_build_dir/lib/pkgconfig" ./configure \
 	  --prefix=$ffmpeg_build_dir \
 	  --pkg-config-flags="--static" \
 	  --extra-cflags="-I$ffmpeg_build_dir/include" \
 	  --extra-ldflags="-L$ffmpeg_build_dir/lib" \
-	  --bindir="$ffmpeg_home_dir" \
+	  --bindir="$ffmpeg_bin_dir" \
 	  --enable-gpl \
 	  --enable-libass \
 	  --enable-fontconfig \
@@ -119,11 +120,11 @@ function install_ffmpeg () {
 	  --enable-libx264 \
 	  --enable-pthreads \
 	  --enable-nonfree
-	PATH="$ffmpeg_home_dir:$PATH" make
+	PATH="$ffmpeg_bin_dir:$PATH" make
 	make install
 	sleep 5
 	hash -r
-	echo "MANPATH_MAP $ffmpeg_home_dir $/ffmpeg_build_dir/share/man" >> ~/.manpath
+	echo "MANPATH_MAP $ffmpeg_bin_dir $/ffmpeg_build_dir/share/man" >> ~/.manpath
 }
 
 function cleanup() {
