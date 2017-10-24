@@ -8,12 +8,23 @@ if [[ $EUID -ne 0 ]]; then
    exit 1
 fi
 
+SCRIPT=`realpath -s $0`
+SCRIPTPATH=`dirname $SCRIPT`
+
 #set variables for directories
 ffmpeg_home_dir="$HOME/ffmpeg"
 ffmpeg_bin_dir="$HOME/ffmpeg/bin"
 ffmpeg_build_dir="$HOME/src/ffmpeg_bash/ffmpeg_build"
 ffmpeg_sources_dir="$HOME/src/ffmpeg_bash/ffmpeg_sources"
 tempfiles=( )
+
+function install_special_scripts () {
+  echo -e "#variables to paths - do not include trailing slash on paths" > $SCRIPTPATH/source.cfg
+  echo -e "path_to_ffmpeg=$ffmpeg_bin_dir" >> $SCRIPTPATH/source.cfg
+  echo -e "path_to_scripts=$SCRIPTPATH" >> $SCRIPTPATH/source.cfg
+  mv $SCRIPTPATH/*Time* $ffmpeg_bin_dir/
+  mv $SCRIPTPATH/*Convert* $ffmpeg_bin_dir/
+}
 
 function setup_ffmpeg_directories () {
 	mkdir -p "$ffmpeg_home_dir"
@@ -146,7 +157,7 @@ function error() {
 
 function show_menu () {
 PS3='Please enter your choice: '
-options=("Install everything" "Install prerequisites" "Install ffmpeg" "Quit")
+options=("Install everything" "Install prerequisites" "Install scripts" "Install ffmpeg" "Quit")
 select opt in "${options[@]}"
 do
     case $opt in
@@ -159,6 +170,7 @@ do
             install_x264
             install_droidsansmono_font
             install_ffmpeg
+            install_special_scripts
             ;;
         "Install prerequisites")
             echo "you chose to install ffmpeg prerequisites"
@@ -168,6 +180,10 @@ do
             install_libnuma
             install_x264
             install_droidsansmono_font
+            ;;
+        "Install scripts")
+            echo "you chose to install scripts only - these require special parameters in ffmpeg"
+            install_special_scripts
             ;;
         "Install ffmpeg")
             echo "you chose to download and compile ffmpeg - this will fail without prerequisites"
