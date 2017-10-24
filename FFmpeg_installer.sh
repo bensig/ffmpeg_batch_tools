@@ -2,11 +2,20 @@
 # Based on from https://trac.ffmpeg.org/wiki/CompilationGuide/Ubuntu
 # created by bensig on 10/4/2017
 
-ffmpeg_build_dir = "$HOME/ffmpeg/ffmpeg_build"
-ffmpeg_sources_dir = "$HOME/ffmpeg/ffmpeg_sources"
+# Detect and exit if 'sudo' wasn't used
+if [[ $EUID -ne 0 ]]; then
+   echo "Add sudo and try again"
+   exit 1
+fi
+
+ffmpeg_home_dir="$HOME/ffmpeg"
+ffmpeg_build_dir="$HOME/ffmpeg/ffmpeg_build"
+ffmpeg_sources_dir="$HOME/ffmpeg/ffmpeg_sources"
 
 #Prep steps: 
-	mkdir $ffmpeg_sources_dir
+	mkdir -p "$ffmpeg_home_dir"
+	mkdir -p "$ffmpeg_build_dir"
+	mkdir -p "$ffmpeg_sources_dir"
 	sudo apt-get remove ffmpeg x265 x264 libx264-dev libx265-dev
 
 	sudo apt-get update && sudo apt-get install -y --no-upgrade autoconf automake build-essential mercurial git libarchive-dev \
