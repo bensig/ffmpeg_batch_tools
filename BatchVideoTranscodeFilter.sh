@@ -1,5 +1,12 @@
 #!/bin/bash
-#This script will recursively create video based on filters
+#This script will recursively create video based on video_filters_array and video_encoder filters set here
+#this varitable allows 4k video to be encoded to 1080p with black bars evenly above and below to prevent cropping or stretching
+video_filters_array=(format=yuv422p,scale="iw*min(1920/iw\,1080/ih):ih*min(1920/iw\,1080/ih)"\,pad="1920:1080:(1920-iw*min(1920/iw\,1080/ih))/2:(1080-ih*min(1920/iw\,1080/ih))/2"\,setsar=1:1)
+#this variable  sets the codec to dnxhd and bitrate to 36Mbps
+video_endcoder="-c:v dnxhd -b:v 36M"
+#this variable removes audio to keep you can use -a copy
+audio_encoder_option="-an"
+
 function batch_ffmpeg_filters () {
   in_file=( )
   out_file=( )
@@ -8,11 +15,6 @@ function batch_ffmpeg_filters () {
   while read -r in_file || [[ -n "${in_file}" ]]; do
       in_filename=$(basename "$in_file")
       out_file="${in_file%.MP4}_DNXHD.mov"
-      #TC rate should be identical to FPS
-      video_filters_array=(format=yuv422p,scale="iw*min(1920/iw\,1080/ih):ih*min(1920/iw\,1080/ih)"\,pad="1920:1080:(1920-iw*min(1920/iw\,1080/ih))/2:(1080-ih*min(1920/iw\,1080/ih))/2",setsar=1:1)
-      video_endcoder="-c:v dnxhd -b:v 36M"
-      #remove audio
-      audio_encoder_option="-an"
       # And finally run the ffmpeg script
       "$path_to_ffmpeg"/ffmpeg -y -nostdin -threads 8 -i $in_file $audio_encoder_option -vf $video_filters_array $video_endcoder "$out_file"
       if [ "$?" -eq "0" ]; then
@@ -37,3 +39,4 @@ if [ -f source.cfg ]; then
        #variables to paths - do not include trailing slash on paths
        path_to_ffmpeg=$HOME/ffmpeg/bin"
     exit
+fi
