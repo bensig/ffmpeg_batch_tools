@@ -45,6 +45,7 @@ if [ -f source.cfg ]; then
     batch_ffmpeg_timecode_burn
   elif [ -f $HOME/ffmpeg/bin/ffmpeg ]; then
     echo "Located ffmpeg even without source.cfg"
+    $path_to_ffmpeg="$HOME/ffmpeg/bin"
     batch_ffmpeg_timecode_burn
   else
     echo "There is no configuration file called source.cfg - please create it and set the path_to_ffmpeg variable"
