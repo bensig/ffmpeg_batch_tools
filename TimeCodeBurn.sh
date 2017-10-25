@@ -35,7 +35,7 @@ if [ -f source.cfg ]; then
     echo "Reading user config...." >&2
     source source.cfg
     ffmpeg_timecode_burn
-  elif [ -f $HOME/ffmpeg/bin/ffmpeg ]
+  elif [ -f $HOME/ffmpeg/bin/ffmpeg ]; then
     echo "Located ffmpeg even without source.cfg"
     $path_to_ffmpeg="$HOME/ffmpeg/bin"
     ffmpeg_timecode_burn
