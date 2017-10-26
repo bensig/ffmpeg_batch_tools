@@ -6,17 +6,16 @@ video_filters_array=(format=yuv422p,scale="iw*min(1920/iw\,1080/ih):ih*min(1920/
 video_endcoder="-c:v dnxhd -b:v 36M"
 #this variable removes audio to keep you can use -a copy
 audio_encoder_option="-an"
-
 function batch_ffmpeg_filters () {
-  in_file=( )
-  out_file=( )
-  read -e -p "Please choose the folder that contains subfolders or videos you want to convert:" in_file_path
+  read -e -p "Please enter the folder that contains subfolders or videos you want to convert:" in_file_path
+  read -e -p "Please enter the destination folder for transcoded videos - must end with slash:" out_file_path
+  [[ -d $out_file_path ]] || mkdir -p $out_file_path
   find "$in_file_path" -iname "*MP4" | \
   while read -r in_file || [[ -n "${in_file}" ]]; do
       in_filename=$(basename "$in_file")
       out_file="${in_file%.MP4}_DNXHD.mov"
       # And finally run the ffmpeg script
-      "$path_to_ffmpeg"/ffmpeg -y -nostdin -threads 8 -i $in_file $audio_encoder_option -vf $video_filters_array $video_endcoder "$out_file"
+      "$path_to_ffmpeg"/ffmpeg -y -nostdin -threads 8 -i $in_file $audio_encoder_option -vf $video_filters_array $video_endcoder "$out_file_path""$out_file"
       if [ "$?" -eq "0" ]; then
           printf -- 'ffmpeg succeeded - created movies!' "${in_file}" "${in_file}" "/n"
       else

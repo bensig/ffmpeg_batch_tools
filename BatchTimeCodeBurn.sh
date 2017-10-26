@@ -2,13 +2,13 @@
 #This script will batch recursivly and burn timecode from what is embedded in a video file and resize the video to 1/4 resolution
 
 function batch_ffmpeg_timecode_burn () {
-  in_file=( )
-  out_file=( )
   read -e -p "Please choose the folder that contains subfolders or videos you want to convert:" in_file_path
+  read -e -p "Please enter the destination folder for transcoded videos - must end with slash:" out_file_path
+  mkdir -p $out_file_path
   find "$in_file_path" -iname "*MP4" | \
   while read -r in_file || [[ -n "${in_file}" ]]; do
       in_filename=$(basename "$in_file")
-      out_file="${in_file%.MP4}.mov"
+      out_file="$out_file_path""${in_filename%.MP4}.mov"
       #TC rate should be identical to FPS
       timecode_rate=24
       #font size and position
