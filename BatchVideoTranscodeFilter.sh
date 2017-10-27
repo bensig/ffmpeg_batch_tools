@@ -15,7 +15,7 @@ function batch_ffmpeg_filters () {
       in_filename=$(basename "$in_file")
       out_file="${in_filename%.MP4}_DNXHD.mov"
       # And finally run the ffmpeg script
-      "$path_to_ffmpeg"/ffmpeg -y -nostdin -threads 8 -i $in_file $audio_encoder_option -vf $video_filters_array $video_endcoder "$out_file_path""$out_file"
+      "$path_to_ffmpeg" -y -nostdin -threads 8 -i $in_file $audio_encoder_option -vf $video_filters_array $video_endcoder "$out_file_path""$out_file"
       if [ "$?" -eq "0" ]; then
           printf -- 'ffmpeg succeeded - created movies!' "${in_file}" "${in_file}" "/n"
       else
@@ -30,12 +30,12 @@ if [ -f source.cfg ]; then
     batch_ffmpeg_filters
   elif [ -f $HOME/ffmpeg/bin/ffmpeg ]; then
     echo "Located ffmpeg even without source.cfg"
-    $path_to_ffmpeg="$HOME/ffmpeg/bin"
+    path_to_ffmpeg="$HOME/ffmpeg/bin/ffmpeg"
     batch_ffmpeg_filters
   else
     echo "There is no configuration file called source.cfg - please create it and set the path_to_ffmpeg variable"
     echo "#example of source.cfg - remove the # comment on the 2nd line and paste these into a new file called source.cfg
        #variables to paths - do not include trailing slash on paths
-       path_to_ffmpeg=$HOME/ffmpeg/bin"
+       path_to_ffmpeg=$HOME/ffmpeg/bin/ffmpeg"
     exit
 fi

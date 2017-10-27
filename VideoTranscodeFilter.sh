@@ -14,7 +14,7 @@ function ffmpeg_filters() {
   #remove audio
   audio_encoder_option="-an"
   # And finally run the ffmpeg script
-  "$path_to_ffmpeg"/ffmpeg -y -nostdin -threads 8 -i $in_file $audio_encoder_option -vf $video_filters $video_endcoder "$out_file"
+  "$path_to_ffmpeg" -y -nostdin -threads 8 -i $in_file $audio_encoder_option -vf $video_filters $video_endcoder "$out_file"
 }
 
 #this runs the script

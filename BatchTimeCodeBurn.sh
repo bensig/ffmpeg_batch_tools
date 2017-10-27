@@ -30,7 +30,7 @@ function batch_ffmpeg_timecode_burn () {
       #remove audio
       audio_encoder_option='-an'
       # And finally run the ffmpeg script
-      "$path_to_ffmpeg"/ffmpeg -y -nostdin -threads 0 -i $in_file $audio_encoder_option $video_endcoder $video_variable_bitrate -preset $video_encoder_preset -deinterlace -vf "$video_resolution_scaling,drawtext=fontfile=$timecode_font: timecode='$timecode_subprocess__timecode_formatted': r=$timecode_rate: $timecode_position: fontcolor=$timecode_font_color: fontsize=$timecode_font_size: box=1: boxcolor=$timecode_box_color" "$out_file"
+      "$path_to_ffmpeg" -y -nostdin -threads 0 -i $in_file $audio_encoder_option $video_endcoder $video_variable_bitrate -preset $video_encoder_preset -deinterlace -vf "$video_resolution_scaling,drawtext=fontfile=$timecode_font: timecode='$timecode_subprocess__timecode_formatted': r=$timecode_rate: $timecode_position: fontcolor=$timecode_font_color: fontsize=$timecode_font_size: box=1: boxcolor=$timecode_box_color" "$out_file"
       if [ "$?" -eq "0" ]; then
           printf -- 'ffmpeg succeeded - created movies!' "${in_file}" "${in_file}" "/n"
       else

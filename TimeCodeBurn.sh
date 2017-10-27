@@ -28,7 +28,7 @@ function ffmpeg_timecode_burn() {
       #remove audio
       audio_encoder_option='-an'
       # And finally run the ffmpeg script
-      $path_to_ffmpeg/ffmpeg -threads 0 -i $in_file $audio_encoder_option $video_endcoder $video_variable_bitrate -preset $video_encoder_preset -deinterlace -vf "$video_resolution_scaling,drawtext=fontfile=$timecode_font: timecode='$timecode_subprocess_timecode_formatted': r=$timecode_rate: $timecode_position: fontcolor=$timecode_font_color: fontsize=$timecode_font_size: box=1: boxcolor=$timecode_box_color" "$out_file"
+      "$path_to_ffmpeg" -threads 0 -i $in_file $audio_encoder_option $video_endcoder $video_variable_bitrate -preset $video_encoder_preset -deinterlace -vf "$video_resolution_scaling,drawtext=fontfile=$timecode_font: timecode='$timecode_subprocess_timecode_formatted': r=$timecode_rate: $timecode_position: fontcolor=$timecode_font_color: fontsize=$timecode_font_size: box=1: boxcolor=$timecode_box_color" "$out_file"
 }
 
 if [ -f source.cfg ]; then
@@ -37,12 +37,12 @@ if [ -f source.cfg ]; then
     ffmpeg_timecode_burn
   elif [ -f $HOME/ffmpeg/bin/ffmpeg ]; then
     echo "Located ffmpeg even without source.cfg"
-    $path_to_ffmpeg="$HOME/ffmpeg/bin"
+    path_to_ffmpeg="$HOME/ffmpeg/bin/ffmpeg"
     ffmpeg_timecode_burn
   else
     echo "There is no configuration file called source.cfg - please create it and set the path_to_ffmpeg variable"
     echo "#example of source.cfg - remove the # comment on the 2nd line and paste these into a new file called source.cfg
-       #variables to paths - do not include trailing slash on paths
-       path_to_ffmpeg=$HOME/ffmpeg/bin"
+       #variables of path to ffmpeg executable
+       path_to_ffmpeg=$HOME/ffmpeg/bin/ffmpeg"
     exit
 fi

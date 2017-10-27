@@ -16,24 +16,24 @@ ffmpeg_home_dir="$HOME/ffmpeg"
 ffmpeg_bin_dir="$HOME/ffmpeg/bin"
 ffmpeg_build_dir="$HOME/src/ffmpeg_bash/ffmpeg_build"
 ffmpeg_sources_dir="$HOME/src/ffmpeg_bash/ffmpeg_sources"
-tempfiles=( )
 
-function install_special_scripts () {
+function install_ffmpeg_scripts() {
   echo -e "#variables to paths - do not include trailing slash on paths" > $SCRIPTPATH/source.cfg
   echo -e "path_to_ffmpeg=$ffmpeg_bin_dir" >> $SCRIPTPATH/source.cfg
   echo -e "path_to_scripts=$SCRIPTPATH" >> $SCRIPTPATH/source.cfg
-  mv $SCRIPTPATH/*Time* $ffmpeg_bin_dir/
-  mv $SCRIPTPATH/*Convert* $ffmpeg_bin_dir/
+  cp $SCRIPTPATH/* $ffmpeg_bin_dir/
 }
 
-function setup_ffmpeg_directories () {
+function setup_ffmpeg_directories() {
+        mkdir -p "$ffmpeg_bin_dir"
 	mkdir -p "$ffmpeg_home_dir"
 	mkdir -p "$ffmpeg_build_dir"
 	mkdir -p "$ffmpeg_sources_dir"
-	sudo apt-get remove ffmpeg x265 x264 libx264-dev libx265-dev
 }
 
-function install_apt_packages () {
+function install_apt_packages() {
+        sudo apt-get remove ffmpeg x265 x264 libx264-dev libx265-dev
+
 	sudo apt-get update && sudo apt-get install -y --no-upgrade autoconf automake build-essential mercurial git libarchive-dev \
 	fontconfig checkinstall libass-dev libfreetype6-dev libsdl2-dev libtheora-dev libgnutls-dev libvorbis-dev \
 	libxcb1-dev libxcb-shm0-dev libxcb-xfixes0-dev pkg-config texinfo libtool libva-dev \
@@ -42,7 +42,7 @@ function install_apt_packages () {
 	libx11-dev libxfixes-dev libmp3lame-dev libfdk-aac-dev libopus-dev
 }
 
-function install_nasm () {
+function install_nasm() {
 #Install NASM assembler
 	cd $ffmpeg_sources_dir
 	wget http://www.nasm.us/pub/nasm/releasebuilds/2.13.01/nasm-2.13.01.tar.bz2
@@ -54,7 +54,7 @@ function install_nasm () {
 	make install
 }
 
-function install_libnuma () {
+function install_libnuma() {
 #install libnuma
    	SOURCE_PREFIX="$ffmpeg_sources_dir"
    	NUMA_LIB="numactl-2.0.11.tar.gz"
@@ -71,7 +71,7 @@ function install_libnuma () {
 	sleep 5
 }
 
-function install_x264 () {
+function install_x264() {
 #compile x264...
 	cd $ffmpeg_sources_dir
 	wget http://download.videolan.org/pub/x264/snapshots/last_x264.tar.bz2
@@ -83,7 +83,7 @@ function install_x264 () {
 	sleep 5
 }
 
-function install_x265 () {
+function install_x265() {
   #compile x265...
   install x265 manually - ffmpeg seems to fail in finding the ubuntu apt install of x265
 	sudo apt-get install cmake mercurial
@@ -96,7 +96,7 @@ function install_x265 () {
 	sleep 5
 }
 
-function install_droidsansmono_font () {
+function install_droidsansmono_font() {
 #Download and install droid sans mono from google fonts - DroidSansMono-Regular.ttf - there might be a cleaner way to do this if this breaks, email me.
 	cd $ffmpeg_sources_dir
 	wget https://github.com/google/fonts/raw/master/apache/droidsansmono/DroidSansMono-Regular.ttf
@@ -106,7 +106,7 @@ function install_droidsansmono_font () {
 	sudo fc-cache -fv
 }
 
-function install_ffmpeg () {
+function install_ffmpeg() {
 #download and install ffmpeg
 	cd $ffmpeg_sources_dir
 	wget http://ffmpeg.org/releases/ffmpeg-snapshot.tar.bz2
@@ -155,13 +155,13 @@ function error() {
   exit "${code}"
 }
 
-function show_menu () {
+function show_menu() {
 PS3='Please enter your choice: '
-options=("Install everything" "Install prerequisites" "Install scripts" "Install ffmpeg" "Quit")
+options=("Install everything" "Install ffmpeg prerequisites" "Install ffmpeg scripts" "Install ffmpeg" "Quit")
 select opt in "${options[@]}"
 do
     case $opt in
-        "Install everything")
+        "Install everything - packages, scripts, and custom ffmpeg in $ffmpeg_bin_dir")
             echo "You chose to run the full installer"
             setup_ffmpeg_directories
             install_apt_packages
@@ -170,9 +170,10 @@ do
             install_x264
             install_droidsansmono_font
             install_ffmpeg
-            install_special_scripts
+            install_ffmpeg_scripts
+  	    echo -e "Check $ffmpeg_bin_dir for scripts and custom-built ffmpeg version for the scripts. Make sure you set this path in source.cfg when you run scripts."
             ;;
-        "Install prerequisites")
+        "Install ffmpeg prerequisites")
             echo "you chose to install ffmpeg prerequisites"
             setup_ffmpeg_directories
             install_apt_packages
@@ -181,11 +182,11 @@ do
             install_x264
             install_droidsansmono_font
             ;;
-        "Install scripts")
+        "Install ffmepg scripts")
             echo "you chose to install scripts only - these require special parameters in ffmpeg"
-            install_special_scripts
+            install_ffmpeg_scripts
             ;;
-        "Install ffmpeg")
+        "Install ffmpeg only")
             echo "you chose to download and compile ffmpeg - this will fail without prerequisites"
             setup_ffmpeg_directories
             install_ffmpeg
