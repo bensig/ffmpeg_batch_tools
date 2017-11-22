@@ -57,11 +57,11 @@ function install_nasm() {
 function install_libnuma() {
 #install libnuma
    	SOURCE_PREFIX="$ffmpeg_sources_dir"
-   	NUMA_LIB="numactl-2.0.11.tar.gz"
+   	NUMA_LIB="numactl_2.0.11.orig.tar.gz"
    	NUMA_PATH=$(basename ${NUMA_LIB} .tar.gz)
    	cd ${SOURCE_PREFIX}
    	if [ ! -d "${NUMA_PATH}" ];then
-        	wget -O ${NUMA_LIB} "ftp://oss.sgi.com/www/projects/libnuma/download/${NUMA_LIB}"
+        	wget -O ${NUMA_LIB} "https://launchpad.net/ubuntu/+archive/primary/+files/${NUMA_LIB}"
    	fi
    	tar xfzv ${NUMA_LIB}
    	cd ${NUMA_PATH}
