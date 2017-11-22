@@ -2,9 +2,13 @@ Bash scripts to batch video file conversions. Change variables of the script to 
 
 I built this because transcoding video with subtitles is a pain when I have to use After Effects or AVID.
 
-This is tested and working on several Ubuntu 16.04 systems. (I was able to compile on Ubuntu 14 with different apt-get options since not all required packages were available.)
+This is tested and working on several Ubuntu 16.04 systems**. (I was able to compile on Ubuntu 14 with different apt-get options since not all required packages were available.)
+
+** on Ubuntu please run 'sudo dpkg-reconfigure dash' and choose "NO" to use dash as the default shell script or the installer will fail.
+
 
 USAGE:
+
 sudo Install.sh - The installer script will download, compile, and install a version of ffmpeg for running these scripts as well as Google fonts for writing timecode onto your video.
 
 Burn timecode onto video:
