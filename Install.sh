@@ -35,7 +35,7 @@ function install_apt_packages() {
         sudo apt-get remove ffmpeg x265 x264 libx264-dev libx265-dev
 
 	sudo apt-get update && sudo apt-get install -y --no-upgrade autoconf automake build-essential mercurial git libarchive-dev \
-	fontconfig checkinstall libass-dev libfreetype6-dev libsdl2-dev libtheora-dev libgnutls-dev libvorbis-dev \
+	fontconfig checkinstall libass-dev libfreetype6-dev libsdl2-dev libtheora-dev libvorbis-dev \
 	libxcb1-dev libxcb-shm0-dev libxcb-xfixes0-dev pkg-config texinfo libtool libva-dev \
 	libbs2b-dev libcaca-dev libopenjp2-7-dev librtmp-dev libvpx-dev libvdpau-dev wget \
 	libwavpack-dev libxvidcore-dev lzma-dev liblzma-dev zlib1g-dev cmake-curses-gui \
@@ -121,7 +121,6 @@ function install_ffmpeg() {
 	  --enable-gpl \
 	  --enable-libass \
 	  --enable-fontconfig \
-	  --enable-gnutls \
 	  --enable-libfreetype \
 	  --enable-libmp3lame \
 	  --enable-libopus \
@@ -157,7 +156,7 @@ function error() {
 
 function show_menu() {
 PS3='Please enter your choice: '
-options=("Install everything" "Install ffmpeg prerequisites" "Install ffmpeg scripts" "Install ffmpeg" "Quit")
+options=("Install everything - packages, scripts, and custom ffmpeg in $ffmpeg_bin_dir" "Install ffmpeg prerequisites" "Install ffmpeg scripts" "Install ffmpeg only" "Quit")
 select opt in "${options[@]}"
 do
     case $opt in
