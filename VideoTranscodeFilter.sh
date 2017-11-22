@@ -24,12 +24,12 @@ if [ -f source.cfg ]; then
     ffmpeg_filters
   elif [ -f $HOME/ffmpeg/bin/ffmpeg ]; then
     echo "Located ffmpeg even without source.cfg"
-    $path_to_ffmpeg="$HOME/ffmpeg/bin"
+    path_to_ffmpeg="$HOME/ffmpeg/bin/ffmpeg"
     ffmpeg_filters
   else
     echo "There is no configuration file called source.cfg - please create it and set the path_to_ffmpeg variable"
     echo "#example of source.cfg - remove the # comment on the 2nd line and paste these into a new file called source.cfg
        #variables to paths - do not include trailing slash on paths
-       path_to_ffmpeg=$HOME/ffmpeg/bin"
+       path_to_ffmpeg=$HOME/ffmpeg/bin/ffmpeg"
     exit
 fi
