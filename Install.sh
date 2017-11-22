@@ -3,7 +3,7 @@
 # created by bensig on 10/4/2017
 
 # Detect and exit if 'sudo' wasn't used
-if [[ $EUID -ne 0 ]]; then
+iif ! [ $(id -u) = 0 ]; then
    echo "Add sudo and try again"
    exit 1
 fi
