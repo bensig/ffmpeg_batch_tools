@@ -25,7 +25,7 @@ function install_ffmpeg_scripts() {
 }
 
 function setup_ffmpeg_directories() {
-  if [ ! -d "${ffmpeg_bin_dir}" ];then
+  if [ ! -d "${ffmpeg_bin_dir}" ]; then
         mkdir -p "$ffmpeg_bin_dir"
       	mkdir -p "$ffmpeg_home_dir"
       	mkdir -p "$ffmpeg_build_dir"
@@ -47,7 +47,7 @@ function install_apt_packages() {
 function install_nasm() {
 #Install NASM assembler
 	cd $ffmpeg_sources_dir
-  if [ ! -d "nasm-2.13.01" ];then
+  if [ ! -d "nasm-2.13.01" ]; then
 	   wget http://www.nasm.us/pub/nasm/releasebuilds/2.13.01/nasm-2.13.01.tar.bz2
 	   tar xjvf nasm-2.13.01.tar.bz2
   fi
@@ -64,7 +64,7 @@ function install_libnuma() {
    	NUMA_LIB="numactl_2.0.11.orig.tar.gz"
    	NUMA_PATH=$(basename ${NUMA_LIB} orig.tar.gz)
    	cd ${SOURCE_PREFIX}
-   	if [ ! -d "${NUMA_PATH}" ];then
+   	if [ ! -d "${NUMA_PATH}" ]; then
         	wget -O ${NUMA_LIB} "https://launchpad.net/ubuntu/+archive/primary/+files/${NUMA_LIB}"
    	      tar xfzv ${NUMA_LIB}
     fi
@@ -78,7 +78,7 @@ function install_libnuma() {
 function install_x264() {
 #compile x264...
 	cd $ffmpeg_sources_dir
-  if [ ! -d "x264-snapshot*" ];then
+  if [ ! -d "x264-snapshot*" ]; then
     wget http://download.videolan.org/pub/x264/snapshots/last_x264.tar.bz2
   fi
 	tar xjvf last_x264.tar.bz2
@@ -93,7 +93,7 @@ function install_x265() {
   #compile x265...
   echo "installing x265 manually - ffmpeg seems to fail in finding the ubuntu apt install of x265"
 	cd $ffmpeg_sources_dir
-  if [ ! -d "x265*" ] then
+  if [ ! -d "x265*" ]; then
 	   hg clone https://bitbucket.org/multicoreware/x265
   fi
   cd $ffmpeg_sources_dir/x265/build/linux
