@@ -78,7 +78,7 @@ function install_libnuma() {
 function install_x264() {
 #compile x264...
 	cd $ffmpeg_sources_dir
-  if [ ! -d "x264-snapshot*" ] then
+  if [ ! -d "x264-snapshot*" ];then
     wget http://download.videolan.org/pub/x264/snapshots/last_x264.tar.bz2
   fi
 	tar xjvf last_x264.tar.bz2
