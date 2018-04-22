@@ -58,7 +58,7 @@ function install_libnuma() {
 #install libnuma
    	SOURCE_PREFIX="$ffmpeg_sources_dir"
    	NUMA_LIB="numactl_2.0.11.orig.tar.gz"
-   	NUMA_PATH=$(basename ${NUMA_LIB} .tar.gz)
+   	NUMA_PATH=$(basename ${NUMA_LIB} orig.tar.gz)
    	cd ${SOURCE_PREFIX}
    	if [ ! -d "${NUMA_PATH}" ];then
         	wget -O ${NUMA_LIB} "https://launchpad.net/ubuntu/+archive/primary/+files/${NUMA_LIB}"
@@ -74,7 +74,9 @@ function install_libnuma() {
 function install_x264() {
 #compile x264...
 	cd $ffmpeg_sources_dir
-	wget http://download.videolan.org/pub/x264/snapshots/last_x264.tar.bz2
+  if [ ! -d "x264-snapshot*" ] then
+    wget -O http://download.videolan.org/pub/x264/snapshots/last_x264.tar.bz2
+  fi
 	tar xjvf last_x264.tar.bz2
 	cd x264-snapshot*
 	PATH="$ffmpeg_bin_dir:$PATH" ./configure --prefix=$ffmpeg_build_dir --bindir="$ffmpeg_bin_dir" --enable-static --disable-opencl
@@ -85,7 +87,7 @@ function install_x264() {
 
 function install_x265() {
   #compile x265...
-  install x265 manually - ffmpeg seems to fail in finding the ubuntu apt install of x265
+  echo "installing x265 manually - ffmpeg seems to fail in finding the ubuntu apt install of x265"
 	sudo apt-get install cmake mercurial
 	cd $ffmpeg_sources_dir
 	hg clone https://bitbucket.org/multicoreware/x265
@@ -99,8 +101,8 @@ function install_x265() {
 function install_droidsansmono_font() {
 #Download and install droid sans mono from google fonts - DroidSansMono-Regular.ttf - there might be a cleaner way to do this if this breaks, email me.
 	cd $ffmpeg_sources_dir
-	wget https://github.com/google/fonts/raw/master/apache/droidsansmono/DroidSansMono-Regular.ttf
-	sudo mkdir /usr/local/share/fonts/d/
+	wget https://github.com/picocms/pico-theme/raw/master/font/DroidSansMono-Regular.ttf
+	sudo mkdir -p /usr/local/share/fonts/d/
 	sudo mv $ffmpeg_sources_dir/DroidSansMono-Regular.ttf /usr/local/share/fonts/d/DroidSansMono_Regular.ttf
 	sudo apt-get install fontconfig
 	sudo fc-cache -fv
