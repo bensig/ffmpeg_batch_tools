@@ -62,7 +62,7 @@ function install_libnuma() {
 #install libnuma
    	SOURCE_PREFIX="$ffmpeg_sources_dir"
    	NUMA_LIB="numactl_2.0.11.orig.tar.gz"
-   	NUMA_PATH=$(basename ${NUMA_LIB} orig.tar.gz)
+   	NUMA_PATH="numactl-2.0.11"
    	cd ${SOURCE_PREFIX}
    	if [ ! -d "${NUMA_PATH}" ]; then
         	wget -O ${NUMA_LIB} "https://launchpad.net/ubuntu/+archive/primary/+files/${NUMA_LIB}"
@@ -78,10 +78,13 @@ function install_libnuma() {
 function install_x264() {
 #compile x264...
 	cd $ffmpeg_sources_dir
-  if [ ! -d "x264-snapshot*" ]; then
+  if ls x264-snapshot* 1> /dev/null 2>&1; then
+    echo "x264 is there"
+  else
+    echo "x264 is there"
     wget http://download.videolan.org/pub/x264/snapshots/last_x264.tar.bz2
+    tar xjvf last_x264.tar.bz2
   fi
-	tar xjvf last_x264.tar.bz2
 	cd x264-snapshot*
 	PATH="$ffmpeg_bin_dir:$PATH" ./configure --prefix=$ffmpeg_build_dir --bindir="$ffmpeg_bin_dir" --enable-static --disable-opencl
 	PATH="$ffmpeg_bin_dir:$PATH" make
@@ -93,7 +96,7 @@ function install_x265() {
   #compile x265...
   echo "installing x265 manually - ffmpeg seems to fail in finding the ubuntu apt install of x265"
 	cd $ffmpeg_sources_dir
-  if [ ! -d "x265*" ]; then
+  if [ ! -d "x265" ]; then
 	   hg clone https://bitbucket.org/multicoreware/x265
   fi
   cd $ffmpeg_sources_dir/x265/build/linux
@@ -116,8 +119,13 @@ function install_droidsansmono_font() {
 function install_ffmpeg() {
 #download and install ffmpeg
 	cd $ffmpeg_sources_dir
-	wget http://ffmpeg.org/releases/ffmpeg-snapshot.tar.bz2
-	tar xjvf ffmpeg-snapshot.tar.bz2
+  if ls ffmpeg* 1> /dev/null 2>&1; then
+    echo "ffmpeg is there"
+  else
+    echo "ffmpeg is not there"
+    wget http://ffmpeg.org/releases/ffmpeg-snapshot.tar.bz2
+    tar xjvf ffmpeg-snapshot.tar.bz2
+  fi
 	cd ffmpeg
 	PATH="$ffmpeg_bin_dir:$PATH" PKG_CONFIG_PATH="$ffmpeg_build_dir/lib/pkgconfig" ./configure \
 	  --prefix=$ffmpeg_build_dir \
