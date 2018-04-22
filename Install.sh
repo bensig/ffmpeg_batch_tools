@@ -25,10 +25,12 @@ function install_ffmpeg_scripts() {
 }
 
 function setup_ffmpeg_directories() {
+  if [ ! -d "${ffmpeg_bin_dir}" ];then
         mkdir -p "$ffmpeg_bin_dir"
-	mkdir -p "$ffmpeg_home_dir"
-	mkdir -p "$ffmpeg_build_dir"
-	mkdir -p "$ffmpeg_sources_dir"
+      	mkdir -p "$ffmpeg_home_dir"
+      	mkdir -p "$ffmpeg_build_dir"
+      	mkdir -p "$ffmpeg_sources_dir"
+  fi
 }
 
 function install_apt_packages() {
@@ -39,14 +41,16 @@ function install_apt_packages() {
 	libxcb1-dev libxcb-shm0-dev libxcb-xfixes0-dev pkg-config texinfo libtool libva-dev \
 	libbs2b-dev libcaca-dev libopenjp2-7-dev librtmp-dev libvpx-dev libvdpau-dev wget \
 	libwavpack-dev libxvidcore-dev lzma-dev liblzma-dev zlib1g-dev cmake-curses-gui \
-	libx11-dev libxfixes-dev libmp3lame-dev libfdk-aac-dev libopus-dev
+	libx11-dev libxfixes-dev libmp3lame-dev libfdk-aac-dev libopus-dev cmake mercurial
 }
 
 function install_nasm() {
 #Install NASM assembler
 	cd $ffmpeg_sources_dir
-	wget http://www.nasm.us/pub/nasm/releasebuilds/2.13.01/nasm-2.13.01.tar.bz2
-	tar xjvf nasm-2.13.01.tar.bz2
+  if [ ! -d "nasm-2.13.01" ];then
+	   wget http://www.nasm.us/pub/nasm/releasebuilds/2.13.01/nasm-2.13.01.tar.bz2
+	   tar xjvf nasm-2.13.01.tar.bz2
+  fi
 	cd nasm-2.13.01
 	./autogen.sh
 	PATH="$ffmpeg_bin_dir:$PATH" ./configure --prefix=$ffmpeg_build_dir --bindir="$ffmpeg_bin_dir"
@@ -58,12 +62,12 @@ function install_libnuma() {
 #install libnuma
    	SOURCE_PREFIX="$ffmpeg_sources_dir"
    	NUMA_LIB="numactl_2.0.11.orig.tar.gz"
-   	NUMA_PATH=$(basename ${NUMA_LIB} .tar.gz)
+   	NUMA_PATH=$(basename ${NUMA_LIB} orig.tar.gz)
    	cd ${SOURCE_PREFIX}
    	if [ ! -d "${NUMA_PATH}" ];then
         	wget -O ${NUMA_LIB} "https://launchpad.net/ubuntu/+archive/primary/+files/${NUMA_LIB}"
-   	fi
-   	tar xfzv ${NUMA_LIB}
+   	      tar xfzv ${NUMA_LIB}
+    fi
    	cd ${NUMA_PATH}
    	./configure PATH="$ffmpeg_bin_dir:$PATH" --prefix=$ffmpeg_build_dir --bindir="$ffmpeg_bin_dir"
 	PATH="$ffmpeg_bin_dir:$PATH" make
@@ -74,7 +78,9 @@ function install_libnuma() {
 function install_x264() {
 #compile x264...
 	cd $ffmpeg_sources_dir
-	wget http://download.videolan.org/pub/x264/snapshots/last_x264.tar.bz2
+  if [ ! -d "x264-snapshot*" ] then
+    wget http://download.videolan.org/pub/x264/snapshots/last_x264.tar.bz2
+  fi
 	tar xjvf last_x264.tar.bz2
 	cd x264-snapshot*
 	PATH="$ffmpeg_bin_dir:$PATH" ./configure --prefix=$ffmpeg_build_dir --bindir="$ffmpeg_bin_dir" --enable-static --disable-opencl
@@ -85,11 +91,12 @@ function install_x264() {
 
 function install_x265() {
   #compile x265...
-  install x265 manually - ffmpeg seems to fail in finding the ubuntu apt install of x265
-	sudo apt-get install cmake mercurial
+  echo "installing x265 manually - ffmpeg seems to fail in finding the ubuntu apt install of x265"
 	cd $ffmpeg_sources_dir
-	hg clone https://bitbucket.org/multicoreware/x265
-	cd $ffmpeg_sources_dir/x265/build/linux
+  if [ ! -d "x265*" ] then
+	   hg clone https://bitbucket.org/multicoreware/x265
+  fi
+  cd $ffmpeg_sources_dir/x265/build/linux
 	PATH="$ffmpeg_bin_dir:$PATH" cmake -G "Unix Makefiles" -DCMAKE_INSTALL_PREFIX=$ffmpeg_build_dir -DENABLE_SHARED:bool=off ../../source
 	make
 	make install
@@ -99,8 +106,8 @@ function install_x265() {
 function install_droidsansmono_font() {
 #Download and install droid sans mono from google fonts - DroidSansMono-Regular.ttf - there might be a cleaner way to do this if this breaks, email me.
 	cd $ffmpeg_sources_dir
-	wget https://github.com/google/fonts/raw/master/apache/droidsansmono/DroidSansMono-Regular.ttf
-	sudo mkdir /usr/local/share/fonts/d/
+	wget https://github.com/picocms/pico-theme/raw/master/font/DroidSansMono-Regular.ttf
+	sudo mkdir -p /usr/local/share/fonts/d/
 	sudo mv $ffmpeg_sources_dir/DroidSansMono-Regular.ttf /usr/local/share/fonts/d/DroidSansMono_Regular.ttf
 	sudo apt-get install fontconfig
 	sudo fc-cache -fv
